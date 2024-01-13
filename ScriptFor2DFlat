@@ -16,8 +16,8 @@ public class PlayerControl : MonoBehaviour
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        moveSpeed = 3f;
-        jumpForce = 30f;
+        moveSpeed = 10f;
+        jumpForce = 20f;
         isJumping = false;
     }
 
@@ -25,10 +25,10 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
         moveHorizontal = Input.GetAxisRaw("Horizontal");
-        moveVertical = Input.GetAxisRaw("Vertical");
+        //moveVertical = Input.GetAxisRaw("Vertical");
 
         // Handle jumping
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && !isJumping)
         {
             rb2d.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
             isJumping = true;
@@ -38,9 +38,10 @@ public class PlayerControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Method of movement, more suitable for 2d Beat 'em up, with y-axis movement:
-        Vector3 movement = new Vector3(moveHorizontal * moveSpeed, moveVertical * moveSpeed, 0.0f);
-        transform.position += movement * Time.deltaTime;
+        // Method of movement:
+        Vector2 movement = new Vector2(moveHorizontal * moveSpeed, 0.0f);
+        transform.position = (Vector2)transform.position + movement * Time.deltaTime;
+
 
         // Flip player's sprite when going left or right:
         flip(moveHorizontal);
